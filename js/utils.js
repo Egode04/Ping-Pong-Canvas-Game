@@ -1,122 +1,3 @@
-let canvas
-let c
-
-let player
-let rect
-
-const balls = []
-const goals = []
-
-let mouse
-
-class Ball{
-
-    constructor({
-
-        position,
-        velocity,
-        radius,
-        color
-
-    }) {
-
-        this.position = position
-        this.velocity = velocity
-        this.radius = radius
-        this.color = color
-
-    }
-
-    draw() {
-
-        c.save()
-            c.beginPath()
-
-                c.arc(
-
-                    this.position.x,
-                    this.position.y,
-                    this.radius, 0,
-                    Math.PI * 2, false
-
-                )
-
-                c.fillStyle = this.color
-                c.shadowColor = this.color
-                c.shadowBlur = this.radius/5
-
-                c.fill()
-
-            c.closePath()
-        c.restore()
-    }
-
-    update() {
-
-        this.draw()
-
-        this.position.x += this.velocity.x
-        this.position.y += this.velocity.y
-
-        if (this.position.y + this.radius + this.velocity.x > canvas.height) {
-
-            this.velocity.y = -this.velocity.y
-
-        } else if (this.position.y - this.radius + this.velocity.y < 0) {
-
-            this.velocity.y = -this.velocity.y
-
-        } 
-        // Collition with Sides
-        if (this.position.x + this.radius + this.velocity.x > canvas.width) {
-
-            this.velocity.x = -this.velocity.x
-
-        } else if (this.position.x - this.radius + this.velocity.x < 0) {
-
-            this.velocity.x = -this.velocity.x
-
-        }
-
-    }
-
-}
-
-class Rect{
-    constructor({
-        position,
-        dimention,
-        color
-    }) {
-
-        this.position = position
-        this.dimention = dimention
-        this.color = color
-
-    }
-
-    draw() {
-
-        c.fillStyle = this.color
-        c.fillRect(
-            this.position.x,
-            this.position.y,
-            this.dimention.width,
-            this.dimention.height
-        )
-
-    }
-
-    update() {
-
-        this.draw()
-
-        this.position.x = mouse.x - this.dimention.width/2
-        this.position.y = mouse.y - this.dimention.height/2
-
-    }
-}
-
 function init() {
 
     canvas = document.querySelector('canvas')
@@ -141,8 +22,8 @@ function init() {
     }))
 
     mouse = {
-        x: innerWidth/2,
-        y: innerHeight/2
+        x: 0,
+        y: 0
     }
 
     rect = new Rect({
@@ -157,6 +38,9 @@ function init() {
         color: '#10b981'
     })
 
+    // Last
+    animate()
+
 }
 
 function animate() {
@@ -166,7 +50,7 @@ function animate() {
     c.fillStyle = 'rgba(255, 255, 255, 0.4)'
     c.fillRect(0, 0, innerWidth, innerHeight)
 
-    balls.forEach(ball => {
+    balls.forEach((ball, index) => {
 
         ball.update()
 
@@ -179,9 +63,14 @@ function animate() {
             )
         ) {
             console.log("Collided!")
-            ball.velocity.x *= 1.02
-            ball.velocity.y *= 1.02
+            // ball.velocity.x *= 1.001
+            // ball.velocity.y *= 1.001
         }
+        
+        if (
+            ball.position.x - ball.radius <= 0 ||
+            ball.position.x + ball.radius >= canvas.width
+        ) balls.splice(index, 1)
     })
 
     rect.update()
@@ -245,13 +134,3 @@ function crashWith(object1, object2, collistionType1, collistionType2 = collisti
 }
 
 init()
-animate()
-
-addEventListener('mousemove', event => {
-
-    mouse = {
-        x: event.pageX,
-        y: event.pageY
-    }
-
-})
