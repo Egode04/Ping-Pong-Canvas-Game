@@ -13,6 +13,8 @@ class Ball{
         this.velocity = velocity
         this.radius = radius
         this.color = color
+        
+        this.isAlive = true
 
     }
 
@@ -55,17 +57,20 @@ class Ball{
 
             this.velocity.y = -this.velocity.y
 
-        } 
+        }
+
         // Collition with Sides
         if (this.position.x + this.radius + this.velocity.x > canvas.width) {
 
             this.velocity.x = -this.velocity.x
-
+            
         } else if (this.position.x - this.radius + this.velocity.x < 0) {
-
+            
             this.velocity.x = -this.velocity.x
+            
+        } else return
 
-        }
+        this.isAlive = false
 
     }
 
@@ -99,9 +104,6 @@ class Rect{
     update() {
 
         this.draw()
-
-        this.position.x = mouse.x - this.dimention.width/2
-        this.position.y = mouse.y - this.dimention.height/2
 
     }
 }

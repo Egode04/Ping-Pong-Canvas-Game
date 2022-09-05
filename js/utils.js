@@ -26,17 +26,33 @@ function init() {
         y: 0
     }
 
-    rect = new Rect({
+    players.push(new Rect({
+
         position: {
-            x: mouse.x,
-            y: mouse.y
+            x: 15,
+            y: innerHeight/2 - 80
         },
         dimention: {
-            width: 30,
-            height: 30
+            width: 20,
+            height: 160
         },
         color: '#10b981'
-    })
+
+    }))
+
+    players.push(new Rect({
+
+        position: {
+            x: innerWidth - 35,
+            y: innerHeight/2 - 80
+        },
+        dimention: {
+            width: 20,
+            height: 160
+        },
+        color: '#10b981'
+
+    }))
 
     // Last
     animate()
@@ -54,26 +70,37 @@ function animate() {
 
         ball.update()
 
-        if (
-            crashWith(
-                rect,
-                ball,
-                "rectangular",
-                "circular",
-            )
-        ) {
-            console.log("Collided!")
-            // ball.velocity.x *= 1.001
-            // ball.velocity.y *= 1.001
+        if (rect !== undefined) {
+            if (
+                crashWith(
+                    rect,
+                    ball,
+                    "rectangular",
+                    "circular",
+                )
+            ) {
+                console.log("Collided!")
+                // ball.velocity.x *= 1.001
+                // ball.velocity.y *= 1.001
+            }
+            rect.update()
         }
         
-        if (
-            ball.position.x - ball.radius <= 0 ||
-            ball.position.x + ball.radius >= canvas.width
-        ) balls.splice(index, 1)
+        if ( !ball.isAlive ) {
+            balls.splice(index, 1)
+        }
+
+        players[1].position.y = ball.position.y - players[1].dimention.height/2
+
     })
 
-    rect.update()
+    players.forEach(player => {
+
+        players[0].position.y = mouse.y - players[0].dimention.height/2
+        
+        player.update()
+
+    })
 
 }
 

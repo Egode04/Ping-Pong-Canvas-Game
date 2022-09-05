@@ -1,10 +1,9 @@
 let canvas
 let c
 
-let player
 let rect
 
 const balls = []
-const goals = []
+const players = []
 
 let mouse
