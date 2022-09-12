@@ -35,16 +35,18 @@ addEventListener('click', event => {
         velocity.y = -1
     }
 
-    balls.push(new Ball({
+    if (balls.length < 1) {
+        balls.push(new Ball({
 
-        position: {
-            x: canvas.width/2,
-            y: canvas.height/2
-        },
-        velocity: velocity,
-        radius: radius,
-        color: '#c026d3'
-
-    }))
+            position: {
+                x: canvas.width/2,
+                y: canvas.height/2
+            },
+            velocity: velocity,
+            radius: radius,
+            color: '#c026d3'
+    
+        }))
+    }
 
 })

@@ -16,7 +16,7 @@ function init() {
             x: 3,
             y: 3
         },
-        radius: 15,
+        radius: 10,
         color: '#c026d3'
 
     }))
@@ -70,20 +70,31 @@ function animate() {
 
         ball.update()
 
-        if (rect !== undefined) {
+        if (players[1] !== undefined) {
             if (
                 crashWith(
-                    rect,
+                    players[1],
+                    ball,
+                    "rectangular",
+                    "circular",
+                ) ||
+                crashWith(
+                    players[0],
                     ball,
                     "rectangular",
                     "circular",
                 )
             ) {
-                console.log("Collided!")
-                // ball.velocity.x *= 1.001
-                // ball.velocity.y *= 1.001
+                ball.velocity.x = -ball.velocity.x
+
+                if (ball.velocity.x * 1.1 > -8 && ball.velocity.x < 8) {
+                    ball.velocity.x *= 1.1
+                    ball.velocity.y *= 1.1
+                }
+                
+                console.log("x:", ball.velocity.x, "y:", ball.velocity.y)
             }
-            rect.update()
+            players[1].update()
         }
         
         if ( !ball.isAlive ) {

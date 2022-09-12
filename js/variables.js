@@ -7,3 +7,5 @@ const balls = []
 const players = []
 
 let mouse
+
+let mouseVelocity
